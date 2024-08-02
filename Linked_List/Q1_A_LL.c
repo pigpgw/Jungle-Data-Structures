@@ -88,9 +88,67 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// 노드를 아이템 크기 순으로 넣어라 
 int insertSortedLL(LinkedList *ll, int item)
 {
 	/* add your code here */
+	// 링크드 리스트가 없을때
+	if (ll == NULL) return - 1;
+
+	ListNode* newNode = malloc(sizeof(ListNode));
+	newNode->item = item;
+	newNode->next = NULL;
+
+	// 링크드 리스트가 비었을때
+	if (ll->head == NULL) {
+		ll->head = newNode;
+		(ll->size)++;
+		return 0;
+	}
+
+	// 링크드 리스트는 다음 아이탬부터 체크 가능 왜냐 이전 노드 주소와 다음 노드 주소를 알아야 처리가 가능한데
+	// 첫 링크드리스트 헤더를 제외하고는 이전 노드 주소를 모름
+	// ll->head 는 알지만 만약 노드가 두개나 여러개 있는 상황이라면 이전 노드 주소를 알수가 없음 
+	// cur = ~~ 와 cur->next로만 가능하기에 다음 노드만 가능하다고 한거임
+	ListNode *cur = ll->head;
+	ListNode *prev = NULL;
+	int index = 0;
+	while (cur != NULL){
+		if (cur->item == item){
+			return -1;
+		}
+
+		// 타겟 노드보다 작으면 다음 넘어감
+		if (cur->item < item){
+			if (cur->next == NULL){
+				cur->next = newNode;
+				++(ll->size);
+				return index + 1;
+			}			
+			prev = cur;
+			cur = cur->next;	
+			index++;
+		} else {
+			// 새로운 노드를 위한 생성
+			if (ll->head == cur){
+				prev = cur;
+				cur = cur->next;
+				newNode->item = item;
+				newNode->next = cur;
+				ll->head = newNode;
+				++(ll->size);
+			}
+
+			newNode->item = item;
+			// 이전 노드의 다음 노드 주소를 새로운 노드 주소로 변경
+			prev->next = newNode;
+			// 새로운 노드의 다음 노드 주소를 기존의 다음 노드의 주소로 변경
+			newNode->next =	cur;
+			++(ll->size);
+			return index;
+		}
+	}
+	return index;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
