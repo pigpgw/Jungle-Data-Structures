@@ -23,7 +23,7 @@ typedef struct _QueueNode {
 	BSTNode *data;
 	struct _QueueNode *nextPtr;
 }QueueNode; // You should not change the definition of QueueNode
-
+ 
 
 typedef struct _queue
 {
@@ -95,6 +95,20 @@ void levelOrderTraversal(BSTNode* root)
 {
 
     /* add your code here */
+	if (root == NULL) return;
+	Queue temp_queue;
+	temp_queue.tail = NULL;
+	temp_queue.head = NULL;
+	enqueue(&temp_queue.head, &temp_queue.tail, root);
+
+	while (!isEmpty(&temp_queue.head))
+	{
+		BSTNode* node = dequeue(&temp_queue.head,&temp_queue.tail);
+		printf("%d ",node->item);
+		if (node -> left) enqueue(&temp_queue.head,&temp_queue.tail,node -> left);
+		if (node -> right) enqueue(&temp_queue.head,&temp_queue.tail, node -> right);
+	}
+	printf("\n");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
